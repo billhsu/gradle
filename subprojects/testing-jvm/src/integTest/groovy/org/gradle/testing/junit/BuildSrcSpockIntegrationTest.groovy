@@ -40,7 +40,7 @@ dependencies {
 
     testCompile '$dependencyNotation',
         'org.spockframework:spock-core:1.0-groovy-2.4@jar',
-        'cglib:cglib:3.2.6',
+        'cglib:cglib:3.2.7',
         'org.objenesis:objenesis:1.2'
 }
 """

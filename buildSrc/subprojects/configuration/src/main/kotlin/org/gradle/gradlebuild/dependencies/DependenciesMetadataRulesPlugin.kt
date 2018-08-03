@@ -60,6 +60,8 @@ open class DependenciesMetadataRulesPlugin : Plugin<Project> {
                 withModule("xalan:xalan", DowngradeXmlApisRule::class.java)
                 withModule("jaxen:jaxen", DowngradeXmlApisRule::class.java)
 
+                withModule("cglib:cglib", DowngradeAntRule::class.java)
+
                 // Test dependencies - minify: remove unused transitive dependencies
                 withLibraryDependencies("org.littleshoot:littleproxy", DependencyRemovalByNameRule::class,
                     setOf("barchart-udt-bundle", "guava", "commons-cli"))
@@ -267,12 +269,26 @@ open class DowngradeXmlApisRule : ComponentMetadataRule {
 }
 
 
+open class DowngradeAntRule : ComponentMetadataRule {
+    override fun execute(context: ComponentMetadataContext) {
+        context.details.allVariants {
+            withDependencies {
+                filter { it.group == "org.apache.ant" }.forEach {
+                    it.version { prefer("1.9.11") }
+                    it.because("We need a Java 7 compatible Ant version")
+                }
+            }
+        }
+    }
+}
+
+
 open class ReplaceCglibNodepWithCglibRule : ComponentMetadataRule {
     override fun execute(context: ComponentMetadataContext) {
         context.details.allVariants {
             withDependencies {
                 filter { it.name == "cglib-nodep" }.forEach {
-                    add("${it.group}:cglib:3.2.6")
+                    add("${it.group}:cglib:3.2.7")
                 }
                 removeAll { it.name == "cglib-nodep" }
             }

@@ -93,6 +93,6 @@
             "cglib:cglib-nodep"
         ],
         "selected": "cglib:cglib",
-        "upgrade": "3.2.6"
+        "upgrade": "3.2.7"
     }
 ]
